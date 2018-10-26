@@ -21,8 +21,8 @@ def load_data(image_path, flip=False, is_test=False, is_one=False):
     img_A, img_B = load_image(image_path, is_one)
     img_A, img_B = preprocess_A_and_B(img_A, img_B, flip=flip, is_test=is_test)
 
-    img_A = img_A/127.5 - 1.
-    img_B = img_B/127.5 - 1.
+    img_A = img_A/511.5 - 1.
+    img_B = img_B/511.5 - 1.
 
     img_AB = np.concatenate((img_A, img_B), axis=2)
     # img_AB shape: (fine_size, fine_size, input_c_dim + output_c_dim)
@@ -39,7 +39,7 @@ def load_image(image_path, is_one=False):
         img_B = input_img[:, w2:w]
         return img_A, img_B
 
-def preprocess_A_and_B(img_A, img_B, load_size=286, fine_size=256, flip=False, is_test=False):
+def preprocess_A_and_B(img_A, img_B, load_size=1024, fine_size=1024, flip=False, is_test=False):
     if is_test:
         img_A = scipy.misc.imresize(img_A, [fine_size, fine_size])
         img_B = scipy.misc.imresize(img_B, [fine_size, fine_size])
@@ -94,7 +94,7 @@ def transform(image, npx=64, is_crop=True, resize_w=64):
         cropped_image = center_crop(image, npx, resize_w=resize_w)
     else:
         cropped_image = image
-    return np.array(cropped_image)/127.5 - 1.
+    return np.array(cropped_image)/511.5 - 1.
 
 def inverse_transform(images):
     return (images+1.)/2.
